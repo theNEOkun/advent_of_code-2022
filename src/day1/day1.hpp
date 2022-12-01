@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "../utils.hpp"
+#include "../utils/utils.hpp"
 
 namespace day1 {
   int run();

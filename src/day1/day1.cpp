@@ -1,7 +1,7 @@
 #include "day1.hpp"
 
-int day1::run() {
-  std::cout << "Hello from day1" << std::endl;
+void day1::run() {
+  std::cout << "DAY 1" << std::endl;
   std::vector<std::string> file = readFile("./src/day1/input");
   std::vector<int> gnomes{0};
   int index = 0;
@@ -21,7 +21,7 @@ int day1::run() {
 
   int largest = gnomes[0];
 
-  std::cout << gnomes[0] + gnomes[1] + gnomes[2] << std::endl;
+  std::cout << "Largest:" << largest << std::endl;
 
-  return largest;
+  std::cout << "Three largest: "<< gnomes[0] + gnomes[1] + gnomes[2] << std::endl;
 }

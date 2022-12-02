@@ -5,5 +5,6 @@
 
 auto main(int argc, char *argv[]) -> int
 {
-  std::cout << day2::run() << std::endl;
+  day1::run();
+  day2::run();
 }

@@ -123,12 +123,7 @@ void day2::run() {
   long tally = 0;
   for (auto each : lines) {
     char choice = get_move(each[2], each[0]);
-    std::cout << "Outcome " << each[2] << " ";
-    std::cout << "Your move " << choice << " ";
-    std::cout << "Their move " << each[0] << " ";
-    int result = test(choice, each[0]);
-    std::cout << result << std::endl;
-    tally += result;
+    tally += test(choice, each[0]);
   }
   std::cout << "TALLY: " << tally << std::endl;
 }

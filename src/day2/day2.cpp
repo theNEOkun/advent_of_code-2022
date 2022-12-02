@@ -119,11 +119,16 @@ void day2::run() {
   std::cout << "DAY 2" << std::endl;
 
   std::vector<std::string> lines = readFile("./src/day2/input");
-
   long tally = 0;
   for (auto each : lines) {
-    char choice = get_move(each[2], each[0]);
-    tally += test(choice, each[0]);
+    tally += test(each[2], each[0]);
   }
-  std::cout << "TALLY: " << tally << std::endl;
+  std::cout << "FIRST TALLY: " << tally << std::endl;
+
+  long second_tally = 0;
+  for (auto each : lines) {
+    char choice = get_move(each[2], each[0]);
+    second_tally += test(choice, each[0]);
+  }
+  std::cout << "SECOND TALLY: " << second_tally << std::endl;
 }

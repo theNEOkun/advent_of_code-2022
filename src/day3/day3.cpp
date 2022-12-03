@@ -9,23 +9,35 @@ void day3::run() {
 
   int sum = 0;
   for (auto each : file) {
-    sum += innerLoop(each);
+    auto retval = innerLoop(each);
+    if(retval == -1)
+      throw;
+    std::printf(" %d\n", retval);
+    sum += retval;
   }
   std::cout << sum << std::endl;
 }
 
 int innerLoop(std::string each) {
-  int sum = 0;
+  int sum = -1;
   auto len = (int) each.length();
   auto half = len >> 1;
-  std::map<char, int> map;
-  for() {
-    map[car] += 1;
-    if(map[car] > 1) {
-      if(car - 'A' < 27) {
-        sum += (car - 'A') + 27;
+  // For each in the first half
+  for(int i = 0; i < half; i++) {
+    char car = each[i];
+    // For each in the second half
+    for(int ii = half + 1; ii < len; ii++) {
+      char ocar = each[ii];
+      if(car == ocar) {
+        if(car - 'A' < 27) {
+          std::printf("%c", car);
+          return (car - 'A') + 27;
+        } else
+          if(car - 'a' < 27) {
+            std::printf("%c", car);
+            return (car - 'a') + 1;
+          }
       }
-      sum += (car - 'a') + 1;
     }
   }
   return sum;

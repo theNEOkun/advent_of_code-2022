@@ -1,42 +1,74 @@
 #include "./day3.hpp"
 
-int innerLoop(std::string each);
+int part2_loop(std::vector<std::string> &file, int counter);
+int innerLoop(std::string &each);
 
-void day3::run() {
-  std::cout << "DAY3" << std::endl;
+int get_val(char car) {
+  if (car - 'A' < 27) {
+    return (car - 'A') + 27;
+  } else if (car - 'a' < 27) {
+    return (car - 'a') + 1;
+  }
+  return -1;
+}
 
-  std::vector<std::string> file = readFile("./resources/input_day3");
+void part_1(std::vector<std::string> &file) {
 
   int sum = 0;
   for (auto each : file) {
     auto retval = innerLoop(each);
-    if(retval == -1)
+    if (retval == -1)
       throw;
-    std::printf(" %d\n", retval);
     sum += retval;
   }
-  std::cout << sum << std::endl;
+  std::cout << "part1: " << sum << std::endl;
 }
 
-int innerLoop(std::string each) {
+void part_2(std::vector<std::string> &file) {
+  int sum = 0;
+  for (size_t counter = 0; counter < file.size(); counter += 3) {
+    auto retval = part2_loop(file, counter);
+    if (retval == -1)
+      throw;
+    sum += retval;
+  }
+  std::cout << "part2: " << sum << std::endl;
+}
+
+int part2_loop(std::vector<std::string> &file, int counter) {
+  for (auto first : file[counter]) {
+    for (auto second : file[counter + 1]) {
+      if (first == second) {
+        for (auto third : file[counter + 2]) {
+          if(first == third)
+            return get_val(third);
+        }
+      }
+    }
+  }
+  return -1;
+}
+
+void day3::run() {
+  std::cout << "DAY3" << std::endl;
+  std::vector<std::string> file = readFile("./resources/input_day3");
+  part_1(file);
+  part_2(file);
+}
+
+int innerLoop(std::string &each) {
   int sum = -1;
-  auto len = (int) each.length();
+  auto len = (int)each.length();
   auto half = len >> 1;
+
   // For each in the first half
-  for(int i = 0; i < half; i++) {
+  for (int i = 0; i < half; i++) {
     char car = each[i];
     // For each in the second half
-    for(int ii = half + 1; ii < len; ii++) {
+    for (int ii = half; ii < len; ii++) {
       char ocar = each[ii];
-      if(car == ocar) {
-        if(car - 'A' < 27) {
-          std::printf("%c", car);
-          return (car - 'A') + 27;
-        } else
-          if(car - 'a' < 27) {
-            std::printf("%c", car);
-            return (car - 'a') + 1;
-          }
+      if (car == ocar) {
+        return get_val(car);
       }
     }
   }

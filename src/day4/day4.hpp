@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DAY4_HPP
+#define DAY4_HPP
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,3 +11,5 @@
 namespace day4 {
   void run();
 }
+
+#endif

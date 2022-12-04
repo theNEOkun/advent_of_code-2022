@@ -1,7 +1,12 @@
 #include "./day3.hpp"
 
+namespace day3 {
+void part1(std::vector<std::string> &file);
+void part2(std::vector<std::string> &file);
+
 int part2_loop(std::vector<std::string> &file, int counter);
 int innerLoop(std::string &each);
+} // namespace day5
 
 int get_val(char car) {
   if (car - 'A' < 27) {
@@ -12,7 +17,7 @@ int get_val(char car) {
   return -1;
 }
 
-void part_1(std::vector<std::string> &file) {
+void day3::part1(std::vector<std::string> &file) {
 
   int sum = 0;
   for (auto each : file) {
@@ -24,7 +29,7 @@ void part_1(std::vector<std::string> &file) {
   std::cout << "part1: " << sum << std::endl;
 }
 
-void part_2(std::vector<std::string> &file) {
+void day3::part2(std::vector<std::string> &file) {
   int sum = 0;
   for (size_t counter = 0; counter < file.size(); counter += 3) {
     auto retval = part2_loop(file, counter);
@@ -35,12 +40,12 @@ void part_2(std::vector<std::string> &file) {
   std::cout << "part2: " << sum << std::endl;
 }
 
-int part2_loop(std::vector<std::string> &file, int counter) {
+int day3::part2_loop(std::vector<std::string> &file, int counter) {
   for (auto first : file[counter]) {
     for (auto second : file[counter + 1]) {
       if (first == second) {
         for (auto third : file[counter + 2]) {
-          if(first == third)
+          if (first == third)
             return get_val(third);
         }
       }
@@ -52,11 +57,11 @@ int part2_loop(std::vector<std::string> &file, int counter) {
 void day3::run() {
   std::cout << "DAY3" << std::endl;
   std::vector<std::string> file = readFile("./resources/input_day3");
-  part_1(file);
-  part_2(file);
+  day3::part1(file);
+  day3::part2(file);
 }
 
-int innerLoop(std::string &each) {
+int day3::innerLoop(std::string &each) {
   int sum = -1;
   auto len = (int)each.length();
   auto half = len >> 1;

@@ -2,7 +2,7 @@
 
 void day1::run() {
   std::cout << "DAY 1" << std::endl;
-  std::vector<std::string> file = readFile("./src/day1/input");
+  std::vector<std::string> file = readFile("../resources/input_day1");
   std::vector<int> gnomes{0};
   int index = 0;
 

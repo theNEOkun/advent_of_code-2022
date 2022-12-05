@@ -118,7 +118,7 @@ void day2::run() {
 
   std::cout << "DAY 2" << std::endl;
 
-  std::vector<std::string> lines = readFile("./src/day2/input");
+  std::vector<std::string> lines = readFile("../resources/input_day2");
   long tally = 0;
   for (auto each : lines) {
     tally += test(each[2], each[0]);

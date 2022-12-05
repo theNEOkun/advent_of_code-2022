@@ -56,7 +56,7 @@ int day3::part2_loop(std::vector<std::string> &file, int counter) {
 
 void day3::run() {
   std::cout << "DAY3" << std::endl;
-  std::vector<std::string> file = readFile("./resources/input_day3");
+  std::vector<std::string> file = readFile("../resources/input_day3");
   day3::part1(file);
   day3::part2(file);
 }

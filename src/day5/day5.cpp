@@ -1,15 +1,18 @@
 #include "./day5.hpp"
 
 namespace day5 {
-void part1(std::vector<std::string> &file);
-void part2(std::vector<std::string> &file);
+
+void part1(std::vector<std::vector<std::string>> &crates, std::vector<std::vector<int>> &directions);
+
+void part2(std::vector<std::vector<std::string>> &crates, std::vector<std::vector<int>> &directions);
+
 
 std::vector<std::vector<std::string>>
 fix_crates(std::vector<std::string> &crate) {
   std::vector<std::vector<std::string>> all_crates;
-  for (int i = 0; i < crate[0].size(); i += 4) {
+  for (size_t i = 0; i < crate[0].size(); i += 4) {
     std::vector<std::string> inner_vec;
-    for (int ii = 0; ii < crate.size(); ii++) {
+    for (size_t ii = 0; ii < crate.size(); ii++) {
       std::string str{crate[ii][i], crate[ii][i + 1], crate[ii][i + 2]};
       if(str == "   ") continue; // remove whitespace
       inner_vec.push_back(str);
@@ -40,7 +43,7 @@ fix_directions(std::vector<std::string> &file) {
       try {
         auto in = std::stoi(temp);
         inner_vec.push_back(in);
-      } catch(std::invalid_argument e) {
+      } catch(std::invalid_argument _) {
         continue;
       }
     }
@@ -68,16 +71,11 @@ void run() {
   auto all_crates = fix_crates(crate);
   auto good_files = fix_directions(file);
 
-  std::printf("%s\n", all_crates[7][0].c_str());
-
-  std::printf("FILE:\n");
-
-
-  day5::part1(file);
-  day5::part2(file);
+  day5::part1(all_crates, good_files);
+  day5::part2(all_crates, good_files);
 }
 
-void part1(std::vector<std::string> &file) { return; }
+void part1(std::vector<std::vector<std::string>> &crates, std::vector<std::vector<int>> &directions) { return; }
 
-void part2(std::vector<std::string> &file) { return; }
+void part2(std::vector<std::vector<std::string>> &crates, std::vector<std::vector<int>> &directions) { return; }
 } // namespace day5

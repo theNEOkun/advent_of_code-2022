@@ -2,34 +2,37 @@
 
 namespace day5 {
 
-void part1(std::vector<std::stack<std::string>> crates,
+void part1(std::vector<std::vector<std::string>> crates,
            std::vector<std::vector<int>> directions);
 
-void part2(std::vector<std::stack<std::string>> crates,
+void part2(std::vector<std::vector<std::string>> crates,
            std::vector<std::vector<int>> directions);
 
-std::vector<std::stack<std::string>>
+std::vector<std::vector<std::string>>
 fix_crates(std::vector<std::string> &crate) {
-  std::vector<std::stack<std::string>> all_crates;
+  std::vector<std::vector<std::string>> all_crates;
   for (size_t i = 0; i < crate[0].size(); i += 4) {
-    std::stack<std::string> inner_vec;
+    std::vector<std::string> inner_vec;
     for (size_t ii = 0; ii < crate.size(); ii++) {
       std::string str{crate[ii][i], crate[ii][i + 1], crate[ii][i + 2]};
       if (str == "   ")
         continue; // remove whitespace
-      inner_vec.push(str);
+      inner_vec.push_back(str);
     }
     all_crates.push_back(inner_vec);
   }
 
   // debug info
 
-  // for (auto each : all_crates) {
-  //   for (auto inner : each) {
-  //     std::printf("%s\t", inner.c_str());
-  //   }
-  //   std::printf("\n");
-  // }
+  int counter = 0;
+  for (auto each : all_crates) {
+    std::printf("%d ", counter);
+    for (auto inner : each) {
+      std::printf("%s\t", inner.c_str());
+    }
+    counter++;
+    std::printf("\n");
+  }
   return all_crates;
 }
 
@@ -76,14 +79,15 @@ void run() {
   day5::part2(all_crates, all_directions);
 }
 
-void part1(std::vector<std::stack<std::string>> crates,
+void part1(std::vector<std::vector<std::string>> crates,
            std::vector<std::vector<int>> directions) {
   for(auto each: directions) {
+    // std::printf("move %d @ %d to %d\n", each[0] - 1, each[1] - 1, each[2] - 1);
     for(int i = 0; i < each[0]; i++) {
-      auto crate = crates[each[1] - 1].top();
-      // std::printf("%d @ %d to %d %s\n", each[0], each[1], each[2], crate.c_str());
-      crates[each[1] - 1].pop();
-      crates[each[2] - 1].push(crate);
+      auto crate = crates[each[1] - 1].front();
+      // std::printf("move %s\n", crate.c_str());
+      crates[each[1] - 1].erase(crates[each[1] - 1].begin());
+      crates[each[2] - 1].insert(crates[each[2] - 1].begin(), crate);
     }
   }
   for(auto each: crates) {
@@ -94,7 +98,7 @@ void part1(std::vector<std::stack<std::string>> crates,
   }
 }
 
-void part2(std::vector<std::stack<std::string>> crates,
+void part2(std::vector<std::vector<std::string>> crates,
            std::vector<std::vector<int>> directions) {
   return;
 }

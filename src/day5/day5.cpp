@@ -24,15 +24,15 @@ fix_crates(std::vector<std::string> &crate) {
 
   // debug info
 
-  int counter = 0;
-  for (auto each : all_crates) {
-    std::printf("%d ", counter);
-    for (auto inner : each) {
-      std::printf("%s\t", inner.c_str());
-    }
-    counter++;
-    std::printf("\n");
-  }
+  // int counter = 0;
+  // for (auto each : all_crates) {
+  //   std::printf("%d ", counter);
+  //   for (auto inner : each) {
+  //     std::printf("%s\t", inner.c_str());
+  //   }
+  //   counter++;
+  //   std::printf("\n");
+  // }
   return all_crates;
 }
 
@@ -93,8 +93,9 @@ void part1(std::vector<std::vector<std::string>> crates,
     }
   }
   for (auto each : crates) {
-    std::printf("%s\n", each[0].c_str());
+    std::printf("%s\t", each[0].c_str());
   }
+  std::printf("\n");
 }
 
 void part2(std::vector<std::vector<std::string>> crates,
@@ -115,7 +116,8 @@ void part2(std::vector<std::vector<std::string>> crates,
     }
   }
   for (auto each : crates) {
-    std::printf("%s\n", each[0].c_str());
+    std::printf("%s\t", each[0].c_str());
   }
+  std::printf("\n");
 }
 } // namespace day5

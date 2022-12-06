@@ -20,59 +20,52 @@ constexpr int LOSS = 0;
 constexpr int DRAW = 3;
 constexpr int WIN = 6;
 
-int test(char ownMove, char loseMove) {
-  int tally = 0;
-  // If I make rock
-  if (ownMove == P_ROCK) {
-    tally += POINT_ROCK;
-    // and they make scissor
-    if (loseMove == G_SCSR) {
-      // I win
-      tally += WIN;
-    }
-    // and they make rock
-    else if (loseMove == G_ROCK) {
-      // We draw
-      tally += DRAW;
-    }
-    // I lose
-    else
-      tally += LOSS;
+enum move {
+  ROCK = 1,
+  PAPER = 2,
+  SCISSOR = 3,
+  FAIL = -1
+};
+
+move getWinningMove(move move) {
+  if(move == move::ROCK) {
+    return move::PAPER;
   }
-  // If I make paper
-  if (ownMove == P_PEPR) {
-    tally += POINT_PEPR;
-    // and they make rock
-    if (loseMove == G_ROCK) {
-      // I win
-      tally += WIN;
-    }
-    // and they make paper
-    else if (loseMove == G_PEPR) {
-      // We draw
-      tally += DRAW;
-    }
-    // I lose
-    else
-      tally += LOSS;
+  if(move == move::PAPER) {
+    return move::SCISSOR;
   }
-  // If I make scissor
-  if (ownMove == P_SCSR) {
-    tally += POINT_SCSR;
-    // and the make paper
-    if (loseMove == G_PEPR) {
-      // I win
-      tally += WIN;
-    }
-    // and they make scissor
-    else if (loseMove == G_SCSR) {
-      // We draw
-      tally += DRAW;
-    }
-    // I lose
-    else
-      tally += LOSS;
+  return move::ROCK;
+}
+
+move getLosingMove(move move) {
+  if(move == move::ROCK) {
+    return move::SCISSOR;
   }
+  if(move == move::PAPER) {
+    return move::ROCK;
+  }
+  return move::PAPER;
+}
+
+
+move getPMove(char move) {
+  if(move == P_ROCK || move == G_ROCK)
+    return move::ROCK;
+  if(move == P_PEPR || move == G_PEPR)
+    return move::PAPER;
+  if(move == P_SCSR || move == G_SCSR)
+    return move::SCISSOR;
+  return move::FAIL;
+}
+
+int test(move ownMove, move theirMove) {
+  int tally = ownMove;
+  if(ownMove == getWinningMove(theirMove))
+    tally += WIN;
+  if(ownMove == theirMove)
+    tally += DRAW;
+  else
+    tally += LOSS;
   return tally;
 }
 
@@ -82,36 +75,21 @@ int test(char ownMove, char loseMove) {
  * @param their_move is the move they are going to make
  * @return rock, paper or scissor based on their move
  */
-char get_move(char outcome, char their_move) {
+move get_move(char outcome, move their_move) {
   constexpr char S_LOSE = 'X';
   constexpr char S_DRAW = 'Y';
   constexpr char S_WIN = 'Z';
 
   if (outcome == S_LOSE) {
-    if (their_move == G_PEPR)
-      return P_ROCK;
-    if (their_move == G_ROCK)
-      return P_SCSR;
-    if (their_move == G_SCSR)
-      return P_PEPR;
+    return getLosingMove(their_move);
   }
   if (outcome == S_DRAW) {
-    if (their_move == G_PEPR)
-      return P_PEPR;
-    if (their_move == G_ROCK)
-      return P_ROCK;
-    if (their_move == G_SCSR)
-      return P_SCSR;
+    return their_move;
   }
   if (outcome == S_WIN) {
-    if (their_move == G_PEPR)
-      return P_SCSR;
-    if (their_move == G_ROCK)
-      return P_PEPR;
-    if (their_move == G_SCSR)
-      return P_ROCK;
+    return getWinningMove(their_move);
   }
-  return 0;
+  return move::FAIL;
 }
 
 void day2::run() {
@@ -121,14 +99,14 @@ void day2::run() {
   std::vector<std::string> lines = readFile("../resources/input_day2");
   long tally = 0;
   for (auto each : lines) {
-    tally += test(each[2], each[0]);
+    tally += test(getPMove(each[2]), getPMove(each[0]));
   }
   std::cout << "FIRST TALLY: " << tally << std::endl;
 
   long second_tally = 0;
   for (auto each : lines) {
-    char choice = get_move(each[2], each[0]);
-    second_tally += test(choice, each[0]);
+    move choice = get_move(each[2], getPMove(each[0]));
+    second_tally += test(choice, getPMove(each[0]));
   }
   std::cout << "SECOND TALLY: " << second_tally << std::endl;
 }

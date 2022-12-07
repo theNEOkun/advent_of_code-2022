@@ -7,7 +7,8 @@ set(SOURCES main.cpp
   day4/day4.cpp
   day5/day5.cpp
   day6/day6.cpp
-  day7/day7.cpp)
+  day7/day7.cpp
+  day7/info.cpp)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O -Wall")
 project(cmake-project)

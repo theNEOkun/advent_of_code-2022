@@ -4,110 +4,103 @@
 
 namespace day7 {
 
-enum info_type { COMMAND, DIRECTORY, FILE, FAIL };
-class info {
-
-  std::string command;
-  std::string command_part2;
-  std::string fileName;
-  long size;
-  info_type what_command;
-
-public:
-  info(std::string incoming, std::string incoming_2)
-      : command{ incoming }, command_part2{ incoming_2 },
-        what_command{ info_type::COMMAND } {}
-  info(long size, std::string fileName)
-    : fileName{ fileName }, what_command{ info_type::FILE } {
-      this->size = size;
-    }
-  info(std::string directory)
-      : fileName{ directory }, what_command{ info_type::DIRECTORY } {}
-  info() : what_command(info_type::FAIL) {}
-
-  const info_type getInfoType() { return this->what_command; }
-
-  const std::string getCommand() {
-    return this->command;
-  }
-
-  const std::string getInput() {
-    return this->command_part2;
-  }
-
-  const long getFileSize() { return this->size; }
-};
-
 void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 
 void run() {
   std::printf("DAY7\n");
-  auto file = readFile("../resources/input_day7");
+  auto file = readFile("../resources/input_day7_examples");
 
   part1(file);
 }
 
-info parseSingleCommand(std::string line) {
+Info parseSingleCommand(std::string line) {
   auto listOfWords = getListOfWords(line, " ");
-  for(auto ach: listOfWords) {
-    std::printf("%s\t", ach.c_str());
-  }
-  std::printf("size: %zu\n", listOfWords.size());
+  // for (auto ach : listOfWords) {
+  //   std::printf("%s\t", ach.c_str());
+  // }
+  // std::printf("size: %zu\n", listOfWords.size());
   if (listOfWords[0] == "$") {
     if (listOfWords.size() > 2)
-      return info(listOfWords[1], listOfWords[2]);
+      return Info(listOfWords[1], listOfWords[2]);
     else
-      return info(listOfWords[1], "");
+      return Info(listOfWords[1], "");
   }
   if (listOfWords[0] == "dir") {
-    return info(listOfWords[1]);
+    return Info(listOfWords[1]);
   }
   try {
     int size = std::stol(listOfWords[0]);
-    return info(size, listOfWords[1]);
-  } catch (std::invalid_argument const&) {
-    return info();
+    return Info(size, listOfWords[1]);
+  } catch (std::invalid_argument const &) {
+    return Info();
   }
-  return info();
+  return Info();
+}
+
+const std::string topDir = "/";
+
+std::string handle_cd(std::map<std::string, std::string> &parents,
+                      std::string current, Info command) {
+  if (command.getInput() == "..") {
+    return parents[current];
+  }
+  if (command.getInput() == "/") {
+    return topDir;
+  }
+  auto get = command.getInput();
+  parents[get] = current;
+  return get;
 }
 
 void part1(std::vector<std::string> &file) {
   std::map<std::string, long> map;
   std::map<std::string, std::string> parents;
-  parents.insert('/', ' ');
+  std::map<std::string, std::vector<std::string>> children;
+  parents[topDir] = " ";
+  std::string currentDir;
   std::string current;
   long tally = 0;
-  for (auto each : file) {
-    info command = parseSingleCommand(each);
-    switch (command.getInfoType()) {
-    case info_type::DIRECTORY:
-      if(command.getCommand() == "cd") {
-        if(command.getInput() == "..") {
-          current = parents[current];
-          continue;
-        }
-        if(command.getInput() == "/") {
-          current = "/";
-          continue;
-        }
-        auto get = command.getInput();
-        parents.insert(get, current);
-        current = get;
-        continue;
-      }
-      if(command.getCommand() == "ls") {
+  bool set = true;
 
+  for (auto command_line : file) {
+    Info command = parseSingleCommand(command_line);
+    switch (command.getInfoType()) {
+    case info_type::COMMAND:
+      if (command.getCommand() == "cd") {
+        if (set) {
+          map[currentDir] = tally;
+        }
+        set = false;
+        current = handle_cd(parents, current, command);
+        currentDir = parents[current] + "/" + current;
+      }
+      if (command.getCommand() == "ls") {
+        set = true;
+        tally = 0;
+        std::printf("\n%s: ", current.c_str());
       }
       break;
     case info_type::FILE:
+      tally += command.getFileSize();
+      std::printf("%s - %ld\t", command.getFileName().c_str(),
+                  command.getFileSize());
       break;
-    case info_type::COMMAND:
+    case info_type::DIRECTORY:
+      std::printf("%s\t", command.getFileName().c_str());
+      children[currentDir].push_back(command.getFileName());
       break;
     default:
       break;
     }
   }
+  int counter = 0;
+  for (const auto &[key, value] : map) {
+    std::printf("%s - %ld\n", key.c_str(), value);
+    if (value <= 100000)
+      counter += value;
+  }
+  std::printf("Part 1: %d\n", counter);
 }
 
 void part2(std::vector<std::string> &file) {}

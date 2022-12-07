@@ -5,3 +5,4 @@
 #include <vector>
 
 std::vector<std::string> readFile(const char* fileName);
+std::vector<std::string> getListOfWords(std::string, std::string);

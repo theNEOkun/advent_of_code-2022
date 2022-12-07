@@ -17,3 +17,13 @@ std::vector<std::string> readFile(const char* fileName) {
   }
   return retvec;
 }
+
+std::vector<std::string> getListOfWords(std::string string, std::string delimiter) {
+  std::vector<std::string> retVal;
+  size_t pos = 0;
+  while((pos = string.find(delimiter)) != std::string::npos) {
+    retVal.push_back(string.substr(0, pos));
+    string.erase(0, pos + delimiter.length());
+  }
+  return retVal;
+} 

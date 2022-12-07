@@ -6,6 +6,7 @@ void part1(std::string arr);
 void part2(std::string arr);
 
 void run() {
+  std::printf("DAY6\n");
   auto file = readFile("../resources/input_day6");
   std::string str = file[0];
   part1(str);
@@ -21,8 +22,8 @@ int getInfo(std::string arr, int length) {
       temp.insert(arr[i + n]);
     if (temp.size() == length) {
       counter += length - 1;
-      for (auto each : temp)
-        std::printf("%c\n", each);
+      // for (auto each : temp)
+      //   std::printf("%c\n", each);
       return counter;
     }
   }

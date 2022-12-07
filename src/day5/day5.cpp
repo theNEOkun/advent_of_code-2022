@@ -47,7 +47,7 @@ std::vector<std::vector<int>> fix_directions(std::vector<std::string> &file) {
       try {
         auto in = std::stoi(temp);
         inner_vec.push_back(in);
-      } catch (std::invalid_argument e) {
+      } catch (std::invalid_argument const&e) {
         continue;
       }
     }

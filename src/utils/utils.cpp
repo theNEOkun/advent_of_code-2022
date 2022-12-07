@@ -25,5 +25,6 @@ std::vector<std::string> getListOfWords(std::string string, std::string delimite
     retVal.push_back(string.substr(0, pos));
     string.erase(0, pos + delimiter.length());
   }
+  retVal.push_back(string);
   return retVal;
 } 

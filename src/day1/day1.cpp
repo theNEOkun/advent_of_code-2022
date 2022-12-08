@@ -1,6 +1,10 @@
 #include "day1.hpp"
+namespace day1 {
 
-void day1::run() {
+void part1();
+void part2();
+
+void run() {
   std::cout << "DAY 1" << std::endl;
   std::vector<std::string> file = readFile("../resources/input_day1");
   std::vector<int> gnomes{0};
@@ -15,13 +19,16 @@ void day1::run() {
     }
   }
 
-  std::sort(gnomes.begin(), gnomes.end(), [](int &a, int &b){
-      return a > b;
-      });
+  std::sort(gnomes.begin(), gnomes.end(), [](int &a, int &b) { return a > b; });
 
   int largest = gnomes[0];
 
   std::cout << "Largest:" << largest << std::endl;
 
-  std::cout << "Three largest: "<< gnomes[0] + gnomes[1] + gnomes[2] << std::endl;
+  std::cout << "Three largest: " << gnomes[0] + gnomes[1] + gnomes[2]
+            << std::endl;
 }
+
+void part1() {}
+void part2() {}
+} // namespace day1

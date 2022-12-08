@@ -40,6 +40,13 @@ Info parseSingleCommand(std::string line) {
 
 const std::string topDir = "/";
 
+struct Tree {
+  Info info;
+  Tree* parent;
+  Tree* children[20];
+  int size;
+};
+
 std::string handle_cd(std::map<std::string, std::string> &parents,
                       std::string current, Info command) {
   if (command.getInput() == "..") {

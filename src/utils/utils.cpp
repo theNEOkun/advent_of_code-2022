@@ -14,6 +14,8 @@ std::vector<std::string> readFile(const char* fileName) {
     while(std::getline(myfile, myline)) {
       retvec.push_back(myline);
     }
+  } else {
+    std::printf("That file does not exist");
   }
   return retvec;
 }

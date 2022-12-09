@@ -1,6 +1,7 @@
 #include "day9.hpp"
 #include <cmath>
 #include <set>
+#include <utility>
 
 #define DEBUG_START
 #ifdef DEBUG_START
@@ -12,76 +13,55 @@
 
 namespace day9 {
 
-enum Dir { RIGHT, DOWN, LEFT, UP, FAIL };
-
-Dir getDir(char direction) {
-  if (direction == 'R')
-    return Dir::RIGHT;
-  if (direction == 'L')
-    return Dir::LEFT;
-  if (direction == 'U')
-    return Dir::UP;
-  if (direction == 'D')
-    return Dir::DOWN;
-  return Dir::FAIL;
+std::ostream &operator<<(std::ostream &Str, std::pair<int, int> const &f) {
+  Str << "{ x: " << f.first << ", y: " << f.second << " }";
+  return Str;
 }
 
-struct Pos {
-  int x;
-  int y;
-
-  bool operator==(const Pos other) const {
-    return other.x == this->x && other.y == this->y;
-  }
-
-  bool isHere(int i, int j) { return i == this->x && j == this->y; }
-
-  friend std::ostream &operator<<(std::ostream &Str, const Pos &v);
-};
-
-std::ostream &operator<<(std::ostream &Str, const Pos &v) {
-  Str << "{ x: " << v.x << ", y: " << v.y << " }";
-  return Str;
+std::pair<int, int>& operator+=(std::pair<int, int>& self, std::pair<int, int>& other) {
+  self.first += other.first;
+  self.second += other.second;
+  return self;
 }
 
 class Rope {
 private:
-  Pos Head;
-  Pos Tail;
+  std::pair<int, int> Head;
+  std::pair<int, int> Tail;
 
-  std::vector<Pos> oldPos;
+  std::set<std::pair<int, int>> oldPos;
 
-  void tailMove(int x, int y) {
-    if (std::max(std::abs(this->Head.x - this->Tail.x),
-                 std::abs(this->Head.y - this->Tail.y)) > 1) {
-      // if the position is not already in there
+  void tailMove(std::pair<int, int> old) {
+    int firstDiff = old.first - this->Tail.first;
+    int secondDiff = old.second - this->Tail.second;
+    if (std::abs(firstDiff) > 1 || std::abs(secondDiff) > 1) {
+      int firstSign = firstDiff == 0 ? 0 : firstDiff / std::abs(firstDiff);
+      int secondSign = secondDiff == 0 ? 0 : secondDiff / std::abs(secondDiff);
 
+      auto nPair = std::make_pair(this->Tail.first + firstSign,
+                                  this->Tail.second + secondSign);
+      this->Tail = nPair;
       DEBUG("Tail: " << this->Tail)
-      this->Tail.x += x;
-      this->Tail.y += y;
-
-      // if (std::find(oldPos.begin(), oldPos.end(), this->Tail) == oldPos.end())
-        this->oldPos.push_back(this->Tail);
+      this->oldPos.insert(nPair);
     }
   }
 
-  void headMove(int x, int y) {
-    int oldx = this->Head.x;
-    int oldy = this->Head.y;
+  void headMove(std::pair<int, int> next) {
+    auto old = this->Head;
+    this->Head += next;
     DEBUG("Head: " << this->Head)
-    this->Head.x += x;
-    this->Head.y += y;
-    tailMove(x, y);
+    tailMove(old);
   }
 
   void print() {
     for (int i = 0; i < 50; i++) {
       for (int j = 0; j < 50; j++) {
-        if (this->Head.isHere(i, j)) {
+        std::pair<int, int> npos = {i, j};
+        if (this->Head == npos) {
           std::cout << "H";
           continue;
         }
-        if (this->Tail.isHere(i, j)) {
+        if (this->Tail == npos) {
           std::cout << "T";
           continue;
         }
@@ -96,26 +76,25 @@ public:
     this->Head = {0, 0};
     this->Tail = {0, 0};
 
-    this->oldPos.push_back(this->Tail);
+    this->oldPos.insert(this->Tail);
   }
 
   void move(std::string movement) {
-    Dir direction = getDir(movement[0]);
     int amount = movement[2] - '0';
 
     for (int i = 0; i < amount; i++) {
-      switch (direction) {
-      case Dir::RIGHT:
-        this->headMove(0, 1);
+      switch (movement[0]) {
+      case 'R':
+        this->headMove(std::make_pair(1, 0));
         break;
-      case Dir::DOWN:
-        this->headMove(-1, 0);
+      case 'L':
+        this->headMove(std::make_pair(-1, 0));
         break;
-      case Dir::LEFT:
-        this->headMove(0, -1);
+      case 'D':
+        this->headMove(std::make_pair(0, -1));
         break;
-      case Dir::UP:
-        this->headMove(1, 0);
+      case 'U':
+        this->headMove(std::make_pair(0, 1));
         break;
       default:
         break;
@@ -123,7 +102,9 @@ public:
     }
   }
 
-  const std::vector<Pos> &getPositions() const { return this->oldPos; }
+  const std::set<std::pair<int, int>> &getPositions() const {
+    return this->oldPos;
+  }
 };
 
 void part1(std::vector<std::string> &file);
@@ -145,7 +126,7 @@ void part1(std::vector<std::string> &file) {
   auto pos = rope.getPositions();
   for (int i = 0; i < 100; i++) {
     for (int j = 0; j < 100; j++) {
-      Pos npos = {i, j};
+      std::pair<int, int> npos = {i, j};
       if (i == 0 && j == 0) {
         std::cout << "s";
         continue;
@@ -160,8 +141,7 @@ void part1(std::vector<std::string> &file) {
   }
   std::printf("Size: %zu\n", pos.size());
 #endif
-
-  std::printf("Part 1: %zu\n", rope.getPositions().size());
+  std::printf("Part1: %lu\n", rope.getPositions().size());
 }
 void part2(std::vector<std::string> &file) {}
 } // namespace day9

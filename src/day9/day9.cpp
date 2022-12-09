@@ -13,12 +13,30 @@
 
 namespace day9 {
 
-std::ostream &operator<<(std::ostream &Str, std::pair<int, int> const &f) {
+enum Dir { RIGHT, DOWN, LEFT, UP, FAIL };
+
+Dir getDir(char direction) {
+  if (direction == 'R')
+    return Dir::RIGHT;
+  if (direction == 'L')
+    return Dir::LEFT;
+  if (direction == 'U')
+    return Dir::UP;
+  if (direction == 'D')
+    return Dir::DOWN;
+  return Dir::FAIL;
+}
+
+std::ostream& operator<<(std::ostream& Str, std::pair<int, int> const& f) {
   Str << "{ x: " << f.first << ", y: " << f.second << " }";
   return Str;
 }
 
-std::pair<int, int>& operator+=(std::pair<int, int>& self, std::pair<int, int>& other) {
+std::pair<int, int> operator+(std::pair<int, int> &self, std::pair<int, int> &other) {
+  return std::make_pair(self.first + other.first, self.second + other.second);
+}
+
+std::pair<int, int> operator+=(std::pair<int, int> &self, std::pair<int, int> &other) {
   self.first += other.first;
   self.second += other.second;
   return self;
@@ -32,31 +50,27 @@ private:
   std::set<std::pair<int, int>> oldPos;
 
   void tailMove(std::pair<int, int> old) {
-    int firstDiff = old.first - this->Tail.first;
-    int secondDiff = old.second - this->Tail.second;
-    if (std::abs(firstDiff) > 1 || std::abs(secondDiff) > 1) {
-      int firstSign = firstDiff == 0 ? 0 : firstDiff / std::abs(firstDiff);
-      int secondSign = secondDiff == 0 ? 0 : secondDiff / std::abs(secondDiff);
+    if (std::max(std::abs(this->Head.first - this->Tail.first),
+                 std::abs(this->Head.second - this->Tail.second)) > 1) {
+      // if the position is not already in there
 
-      auto nPair = std::make_pair(this->Tail.first + firstSign,
-                                  this->Tail.second + secondSign);
-      this->Tail = nPair;
       DEBUG("Tail: " << this->Tail)
-      this->oldPos.insert(nPair);
+      this->Tail = old;
+      this->oldPos.insert(this->Tail);
     }
   }
 
   void headMove(std::pair<int, int> next) {
     auto old = this->Head;
-    this->Head += next;
     DEBUG("Head: " << this->Head)
+    this->Head += next;
     tailMove(old);
   }
 
   void print() {
     for (int i = 0; i < 50; i++) {
       for (int j = 0; j < 50; j++) {
-        std::pair<int, int> npos = {i, j};
+        std::pair<int, int> npos = { i, j };
         if (this->Head == npos) {
           std::cout << "H";
           continue;
@@ -80,21 +94,22 @@ public:
   }
 
   void move(std::string movement) {
-    int amount = movement[2] - '0';
+    Dir direction = getDir(movement[0]);
+    int amount = std::stoi(&movement[2]);
 
     for (int i = 0; i < amount; i++) {
-      switch (movement[0]) {
-      case 'R':
-        this->headMove(std::make_pair(1, 0));
+      switch (direction) {
+      case Dir::RIGHT:
+        this->headMove(std::make_pair(0, 1));
         break;
-      case 'L':
+      case Dir::DOWN:
         this->headMove(std::make_pair(-1, 0));
         break;
-      case 'D':
+      case Dir::LEFT:
         this->headMove(std::make_pair(0, -1));
         break;
-      case 'U':
-        this->headMove(std::make_pair(0, 1));
+      case Dir::UP:
+        this->headMove(std::make_pair(1, 0));
         break;
       default:
         break;
@@ -102,9 +117,7 @@ public:
     }
   }
 
-  const std::set<std::pair<int, int>> &getPositions() const {
-    return this->oldPos;
-  }
+  const std::set<std::pair<int, int>> &getPositions() const { return this->oldPos; }
 };
 
 void part1(std::vector<std::string> &file);
@@ -122,25 +135,6 @@ void part1(std::vector<std::string> &file) {
   for (auto each : file) {
     rope.move(each);
   }
-#ifdef DEBUG_START_FULL
-  auto pos = rope.getPositions();
-  for (int i = 0; i < 100; i++) {
-    for (int j = 0; j < 100; j++) {
-      std::pair<int, int> npos = {i, j};
-      if (i == 0 && j == 0) {
-        std::cout << "s";
-        continue;
-      }
-      if (std::find(pos.begin(), pos.end(), npos) != pos.end()) {
-        std::cout << "#";
-        continue;
-      }
-      std::cout << ".";
-    }
-    std::cout << std::endl;
-  }
-  std::printf("Size: %zu\n", pos.size());
-#endif
   std::printf("Part1: %lu\n", rope.getPositions().size());
 }
 void part2(std::vector<std::string> &file) {}

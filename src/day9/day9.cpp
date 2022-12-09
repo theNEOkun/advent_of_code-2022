@@ -13,20 +13,6 @@
 
 namespace day9 {
 
-enum Dir { RIGHT, DOWN, LEFT, UP, FAIL };
-
-Dir getDir(char direction) {
-  if (direction == 'R')
-    return Dir::RIGHT;
-  if (direction == 'L')
-    return Dir::LEFT;
-  if (direction == 'U')
-    return Dir::UP;
-  if (direction == 'D')
-    return Dir::DOWN;
-  return Dir::FAIL;
-}
-
 std::ostream& operator<<(std::ostream& Str, std::pair<int, int> const& f) {
   Str << "{ x: " << f.first << ", y: " << f.second << " }";
   return Str;
@@ -67,24 +53,6 @@ private:
     tailMove(old);
   }
 
-  void print() {
-    for (int i = 0; i < 50; i++) {
-      for (int j = 0; j < 50; j++) {
-        std::pair<int, int> npos = { i, j };
-        if (this->Head == npos) {
-          std::cout << "H";
-          continue;
-        }
-        if (this->Tail == npos) {
-          std::cout << "T";
-          continue;
-        }
-        std::cout << ".";
-      }
-      std::cout << std::endl;
-    }
-  }
-
 public:
   Rope() {
     this->Head = {0, 0};
@@ -94,21 +62,20 @@ public:
   }
 
   void move(std::string movement) {
-    Dir direction = getDir(movement[0]);
     int amount = std::stoi(&movement[2]);
 
     for (int i = 0; i < amount; i++) {
-      switch (direction) {
-      case Dir::RIGHT:
+      switch (movement[0]) {
+      case 'R':
         this->headMove(std::make_pair(0, 1));
         break;
-      case Dir::DOWN:
+      case 'D':
         this->headMove(std::make_pair(-1, 0));
         break;
-      case Dir::LEFT:
+      case 'L':
         this->headMove(std::make_pair(0, -1));
         break;
-      case Dir::UP:
+      case 'U':
         this->headMove(std::make_pair(1, 0));
         break;
       default:

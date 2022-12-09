@@ -8,6 +8,7 @@
 #include "day6/day6.hpp"
 #include "day7/day7.hpp"
 #include "day8/day8.hpp"
+#include "day9/day9.hpp"
 
 void line();
 
@@ -28,6 +29,8 @@ auto main(int argc, char *argv[]) -> int
   day7::run();
   line();
   day8::run();
+  line();
+  day9::run();
   line();
 }
 

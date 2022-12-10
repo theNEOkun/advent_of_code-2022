@@ -7,5 +7,5 @@
 #include "../utils/utils.hpp"
 
 namespace day1 {
-  void run();
+  void run(utils utils);
 }

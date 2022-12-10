@@ -9,7 +9,7 @@
 #include "../utils/utils.hpp"
 
 namespace day4 {
-  void run();
+  void run(utils utils);
 }
 
 #endif

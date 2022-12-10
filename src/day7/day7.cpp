@@ -7,15 +7,15 @@ namespace day7 {
 void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 
-void run() {
+void run(utils utils) {
   std::printf("DAY7\n");
-  auto file = readFile("../resources/input_day7_examples");
+  auto file = utils.readFile("resources/input_day7_examples");
 
   part1(file);
 }
 
 Info parseSingleCommand(std::string line) {
-  auto listOfWords = getListOfWords(line, " ");
+  auto listOfWords = utils::splitString(line, " ");
   // for (auto ach : listOfWords) {
   //   std::printf("%s\t", ach.c_str());
   // }

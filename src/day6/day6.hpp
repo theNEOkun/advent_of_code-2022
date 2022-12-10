@@ -8,5 +8,5 @@
 #include "../utils/utils.hpp"
 
 namespace day6 {
-  void run();
+  void run(utils utils);
 }

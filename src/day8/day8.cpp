@@ -4,9 +4,9 @@ namespace day8 {
 void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 
-void run() {
+void run(utils utils) {
   std::printf("DAY8\n");
-  auto file = readFile("../resources/input_day8");
+  auto file = utils.readFile("resources/input_day8");
   part1(file);
   part2(file);
 }

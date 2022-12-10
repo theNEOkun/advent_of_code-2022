@@ -92,11 +92,11 @@ move get_move(char outcome, move their_move) {
   return move::FAIL;
 }
 
-void day2::run() {
+void day2::run(utils utils) {
 
   std::cout << "DAY 2" << std::endl;
 
-  std::vector<std::string> lines = readFile("../resources/input_day2");
+  std::vector<std::string> lines = utils.readFile("resources/input_day2");
   long tally = 0;
   for (auto each : lines) {
     tally += test(getPMove(each[2]), getPMove(each[0]));

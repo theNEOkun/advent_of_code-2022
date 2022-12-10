@@ -6,9 +6,9 @@ void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 } // namespace day4
 
-void day4::run() {
+void day4::run(utils utils) {
   std::cout << "DAY4" << std::endl;
-  std::vector<std::string> file = readFile("../resources/input_day4");
+  std::vector<std::string> file = utils.readFile("resources/input_day4");
 
   part1(file);
   part2(file);

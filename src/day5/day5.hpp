@@ -11,7 +11,7 @@
 #include "../utils/utils.hpp"
 
 namespace day5 {
-  void run();
+  void run(utils utils);
 }
 
 #endif

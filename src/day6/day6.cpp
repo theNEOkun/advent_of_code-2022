@@ -5,9 +5,9 @@ namespace day6 {
 void part1(std::string arr);
 void part2(std::string arr);
 
-void run() {
+void run(utils utils) {
   std::printf("DAY6\n");
-  auto file = readFile("../resources/input_day6");
+  auto file = utils.readFile("resources/input_day6");
   std::string str = file[0];
   part1(str);
   part2(str);

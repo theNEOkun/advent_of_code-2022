@@ -8,5 +8,5 @@
 #include "./info.hpp"
 
 namespace day7 {
-  void run();
+  void run(utils utils);
 }

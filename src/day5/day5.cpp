@@ -66,9 +66,9 @@ std::vector<std::vector<int>> fix_directions(std::vector<std::string> &file) {
   return all_directions;
 }
 
-void run() {
+void run(utils utils) {
   std::cout << "DAY5" << std::endl;
-  std::vector<std::string> incoming = readFile("../resources/input_day5");
+  std::vector<std::string> incoming = utils.readFile("resources/input_day5");
   std::vector<std::string> crate(&incoming[0], &incoming[8]);
   std::vector<std::string> file(&incoming[10], &incoming[incoming.size()]);
 

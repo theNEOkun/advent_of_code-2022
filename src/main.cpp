@@ -14,23 +14,24 @@ void line();
 
 auto main(int argc, char *argv[]) -> int
 {
-  day1::run();
+  utils utils(argv[0]);
+  day1::run(utils);
   line();
-  day2::run();
+  day2::run(utils);
   line();
-  day3::run();
+  day3::run(utils);
   line();
-  day4::run();
+  day4::run(utils);
   line();
-  day5::run();
+  day5::run(utils);
   line();
-  day6::run();
+  day6::run(utils);
   line();
-  day7::run();
+  day7::run(utils);
   line();
-  day8::run();
+  day8::run(utils);
   line();
-  day9::run();
+  day9::run(utils);
   line();
 }
 

@@ -5,6 +5,6 @@
 #include "../utils/utils.hpp"
 
 namespace day3 {
-  void run();
+  void run(utils utils);
 }
 #endif

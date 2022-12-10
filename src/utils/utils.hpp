@@ -6,9 +6,10 @@
 
 class utils {
   std::string cwd;
-public:
-  utils(char* cwd);
-  std::vector<std::string> readFile(const char *fileName);
-};
+  std::string baseDir;
 
-std::vector<std::string> getListOfWords(std::string, std::string);
+public:
+  utils(char *cwd);
+  std::vector<std::string> readFile(const char *fileName);
+  static std::vector<std::string> splitString(std::string str, std::string delimiter);
+};

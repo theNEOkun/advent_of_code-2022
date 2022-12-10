@@ -112,9 +112,9 @@ public:
 void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 
-void run() {
+void run(utils utils) {
   std::printf("DAY9\n");
-  auto file = readFile("../resources/input_day9");
+  auto file = utils.readFile("resources/input_day9");
 
   part1(file);
   part2(file);

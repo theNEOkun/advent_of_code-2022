@@ -4,9 +4,9 @@ namespace day1 {
 void part1();
 void part2();
 
-void run() {
+void run(utils utils) {
   std::cout << "DAY 1" << std::endl;
-  std::vector<std::string> file = readFile("../resources/input_day1");
+  std::vector<std::string> file = utils.readFile("resources/input_day1");
   std::vector<int> gnomes{0};
   int index = 0;
 

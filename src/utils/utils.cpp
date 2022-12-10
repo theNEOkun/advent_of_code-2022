@@ -1,12 +1,14 @@
 #include "utils.hpp"
 
+utils::utils(char* cwd): cwd(cwd) {}
+
 /**
  * Read a file line by line into a vector and then return
  * @param fileName is the fileName to read
  * @return std::vector<std::string> containing all lines of the file
  */
-std::vector<std::string> readFile(const char* fileName) {
-  std::ifstream myfile(fileName);
+std::vector<std::string> utils::readFile(const char* fileName) {
+  std::ifstream myfile(cwd + '/' + fileName);
   std::vector<std::string> retvec;
 
   if (myfile.is_open()) {

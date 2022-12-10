@@ -35,3 +35,10 @@ std::vector<std::string> utils::readFile(const char* fileName) {
   }
   return retvec;
 }
+
+int utils::map(int number, int start1, int stop1, int start2, int stop2) {
+  std::printf("%d\n", number);
+  int ret = ((number-start1)/(stop1-start1))*(stop2-start2)+start2;
+  std::printf("%d\n", ret);
+  return ret;
+}

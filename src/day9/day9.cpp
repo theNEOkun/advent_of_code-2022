@@ -45,13 +45,22 @@ private:
   void tailMove(std::pair<int, int> old) {
     auto prev = old;
     for (int i = 1; i < rope.size(); i++) {
-      if (chebyshev(this->rope[i - 1], this->rope[i])) {
-        DEBUG("before rope: " << *(this->rope.end() - 1) << " old: " << old)
-        prev = this->rope[i];
-        this->rope[i] = old;
-        // if the position is not already in there
-        DEBUG("after rope: " << *(this->rope.end() - 1)
-                             << " head: " << *this->rope.begin())
+      auto first = this->rope[i - 1];
+      auto second = this->rope[i];
+      int fDiff = first.first - second.first;
+      int sDiff = first.second - second.second;
+      auto npar = std::make_pair((fDiff > 0)? 1: -1, (sDiff > 0)? 1: -1);
+      if (std::abs(fDiff) + std::abs(sDiff) > 2) {
+        this->rope[i] += npar;
+        continue;
+      }
+      if(std::abs(fDiff) > 1) {
+        this->rope[i].first += npar.first;
+        continue;
+      }
+      if(std::abs(sDiff) > 1) {
+        this->rope[i].second += npar.second;
+        continue;
       }
     }
     this->oldPos.insert(*(this->rope.end() - 1));
@@ -71,8 +80,7 @@ public:
     for (auto i = 0; i < size; i++) {
       this->rope.push_back(start);
     }
-    std::printf("%zu\n", this->rope.size());
-    // this->oldPos.insert(*this->rope.end());
+    this->oldPos.insert(start);
   }
 
   std::pair<int, int> getNext(char move) {
@@ -104,6 +112,32 @@ public:
     }
   }
 
+  const void print() const {
+    std::vector<std::vector<std::string>> window;
+    int windowSize = 25;
+    for (int i = -windowSize; i < windowSize; i++) {
+      std::vector<std::string> temp;
+      for (int j = -windowSize; j < windowSize; j++) {
+        temp.push_back(".");
+      }
+      window.push_back(temp);
+    }
+
+    for (auto each : this->rope) {
+      int i = each.first + windowSize;
+      int j = each.second + windowSize;
+      window[i][j] = "S";
+    }
+
+    for (auto each : window) {
+      for (auto inner : each) {
+        std::cout << inner;
+      }
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
+
   const std::set<std::pair<int, int>> &getPositions() const {
     return this->oldPos;
   }
@@ -114,7 +148,7 @@ void part2(std::vector<std::string> &file);
 
 void run(utils utils) {
   std::printf("DAY9\n");
-  auto file = utils.readFile("resources/input_day9");
+  auto file = utils.readFile("resources/input_day9_examples");
 
   part1(file);
   part2(file);
@@ -127,11 +161,13 @@ void part1(std::vector<std::string> &file) {
   }
   std::printf("Part1: %lu\n", rope.getPositions().size());
 }
+
 void part2(std::vector<std::string> &file) {
   Rope rope(10);
   for (auto each : file) {
     rope.move(each);
+    // rope.print();
   }
-  std::printf("Part1: %lu\n", rope.getPositions().size());
+  std::printf("Part2: %lu\n", rope.getPositions().size());
 }
 } // namespace day9

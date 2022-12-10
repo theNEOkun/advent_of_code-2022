@@ -1,34 +1,57 @@
 #include "day10.hpp"
 namespace day10 {
 
-void part1();
-void part2();
+void part1(std::vector<std::string> &file);
+void part2(std::vector<std::string> &file);
 
 void run(utils utils) {
-  std::cout << "DAY 1" << std::endl;
-  std::vector<std::string> file = utils.readFile("resources/input_day10");
-  std::vector<int> gnomes{0};
-  int index = 0;
-
-  for (auto each : file) {
-    if (each.size() == 0) {
-      gnomes.push_back(0);
-      index++;
-    } else {
-      gnomes[index] += std::stoi(each);
-    }
-  }
-
-  std::sort(gnomes.begin(), gnomes.end(), [](int &a, int &b) { return a > b; });
-
-  int largest = gnomes[0];
-
-  std::cout << "Largest:" << largest << std::endl;
-
-  std::cout << "Three largest: " << gnomes[0] + gnomes[1] + gnomes[2]
-            << std::endl;
+  std::vector<std::string> file = utils.readFile("resources/input_day10_examples");
+  
+  part1(file);
 }
 
-void part1() {}
-void part2() {}
+enum ops { NOOP, ADD, FAIL };
+
+ops getOps(std::string op){
+  if(op == "noop")
+    return ops::NOOP;
+  if(op == "addx")
+    return ops::ADD;
+  return ops::FAIL;
+}
+
+void part1(std::vector<std::string> &file) {
+  int endcounter = 0;
+
+  int X = 1;
+  int cycles = 0;
+  for(auto each: file) {
+    int count = 0;
+    std::vector<std::string> parts = utils::splitString(each, " ");
+
+    int addToX = 0;
+    switch(getOps(parts[0])) {
+      case NOOP:
+        count = 1;
+        break;
+      case ADD:
+        addToX = std::stoi(parts[1]);
+        count = 2;
+        break;
+      default:
+        break;
+    }
+
+    for(int i = 0; i < count; i++) {
+      cycles++;
+      if(cycles % 20 == 0) {
+        std::printf("%d\n", X);
+        endcounter += X * cycles;
+      }
+    }
+    X += addToX;
+  }
+  std::printf("%d\n", endcounter);
+}
+void part2(std::vector<std::string> &file) {}
 } // namespace day10

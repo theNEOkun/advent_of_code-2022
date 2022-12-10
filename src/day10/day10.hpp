@@ -6,6 +6,6 @@
 
 #include "../utils/utils.hpp"
 
-namespace day1 {
+namespace day10 {
   void run(utils utils);
 }

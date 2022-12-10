@@ -5,7 +5,7 @@ void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 
 void run(utils utils) {
-  std::vector<std::string> file = utils.readFile("resources/input_day10_examples");
+  std::vector<std::string> file = utils.readFile("resources/input_day10");
   
   part1(file);
 }
@@ -22,6 +22,7 @@ ops getOps(std::string op){
 
 void part1(std::vector<std::string> &file) {
   int endcounter = 0;
+  int next = 20;
 
   int X = 1;
   int cycles = 0;
@@ -44,9 +45,10 @@ void part1(std::vector<std::string> &file) {
 
     for(int i = 0; i < count; i++) {
       cycles++;
-      if(cycles % 20 == 0) {
-        std::printf("%d\n", X);
+      if(cycles == next) {
+        std::printf("%d - %d\n", X, cycles);
         endcounter += X * cycles;
+        next += 40;
       }
     }
     X += addToX;

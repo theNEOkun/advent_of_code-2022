@@ -5,6 +5,7 @@ void part1(std::vector<std::string> &file);
 void part2(std::vector<std::string> &file);
 
 void run(utils utils) {
+  std::printf("DAY10");
   std::vector<std::string> file = utils.readFile("resources/input_day10");
   
   part1(file);
@@ -46,14 +47,13 @@ void part1(std::vector<std::string> &file) {
     for(int i = 0; i < count; i++) {
       cycles++;
       if(cycles == next) {
-        std::printf("%d - %d\n", X, cycles);
         endcounter += X * cycles;
         next += 40;
       }
     }
     X += addToX;
   }
-  std::printf("%d\n", endcounter);
+  std::printf("Part 1: %d\n", endcounter);
 }
 void part2(std::vector<std::string> &file) {}
 } // namespace day10

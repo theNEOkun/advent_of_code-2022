@@ -12,5 +12,6 @@ public:
   utils(char *cwd);
   std::vector<std::string> readFile(const char *fileName);
   static std::vector<std::string> splitString(std::string str, std::string delimiter);
+  static std::vector<std::string> splitString(std::string str);
   static int map(int number, int start1, int stop1, int start2, int stop2);
 };

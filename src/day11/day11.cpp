@@ -1,5 +1,24 @@
 #include "day11.hpp"
+#include <cassert>
+#include <deque>
 #include <functional>
+
+#define DEBUG_PRINT
+
+#ifdef DEBUG_PRINT
+#define DEBUG(x) std::cout << x << std::endl;
+#endif
+#ifdef DEBUG_PRINT
+#define DEBUG_LIST(x)                                                          \
+  for (auto each : x)                                                          \
+    std::cout << each << std::endl;
+#endif
+#ifndef DEBUG_PRINT
+#define DEBUG(x)
+#endif
+#ifndef DEBUG_PRINT
+#define DEBUG_LIST(x)
+#endif
 
 namespace day11 {
 
@@ -14,95 +33,83 @@ makeOperation(std::vector<std::string> operations) {
   }
   if (operations[1] == "*")
     return [=](int old1, int old2) -> int {
-      return old1 + std::stoi(operations[2]);
+      return old1 * std::stoi(operations[2]);
     };
   else
     return [=](int old1, int old2) -> int {
-      return old1 * std::stoi(operations[2]);
+      return old1 + std::stoi(operations[2]);
     };
 }
 
-std::function<int(int)> makeTest(std::string test, std::string trueMonkey,
-                                 std::string falseMonkey) {
+std::function<int(int)> makeTest(int test, int trueMonkey, int falseMonkey) {
   return [=](int testnum) -> int {
-    if (testnum % std::stoi(test) == 0) {
-      return std::stoi(trueMonkey);
-    } else {
-      return std::stoi(falseMonkey);
-    }
+    return (testnum % test == 0) ? trueMonkey : falseMonkey;
   };
 }
 
 class Monkey {
 private:
   int name;
-  std::vector<int> items;
+  std::deque<int> items;
   std::function<int(int, int)> operation;
-  std::function<bool(int)> test;
+  std::function<int(int)> test;
   int inspections = 0;
 
 public:
   Monkey(std::vector<std::string> monkeyInfo) {
-    for (auto each : monkeyInfo)
-      std::cout << each << std::endl;
-
     auto nameRow = utils::splitString(monkeyInfo[0]);
-    this->name = std::stoi(nameRow[1]);
+    name = std::stoi(nameRow[1]);
 
     auto itemRow = utils::splitString(monkeyInfo[1], ": ");
     auto itemList = utils::splitString(itemRow[1], ", ");
-    std::vector<int> items;
     for (auto each : itemList) {
       items.push_back(std::stoi(each));
     }
-    this->items = items;
 
     auto operationRow = utils::splitString(monkeyInfo[2], ": ");
     auto operations =
         utils::splitString(utils::splitString(operationRow[1], " = ")[1]);
-    this->operation = makeOperation(operations);
+    operation = makeOperation(operations);
 
-    auto test = utils::splitString(monkeyInfo[3]).back();
+    auto testNum = utils::splitString(monkeyInfo[3]).back();
     auto trueMonkey = utils::splitString(monkeyInfo[4]).back();
     auto falseMonkey = utils::splitString(monkeyInfo[5]).back();
-    this->test = makeTest(test, trueMonkey, falseMonkey);
+    test = makeTest(std::stoi(testNum), std::stoi(trueMonkey),
+                    std::stoi(falseMonkey));
   }
 
-  const int getName() const { return this->name; }
+  const int getName() const { return name; }
 
-  void recieveItem(int item) { this->items.push_back(item); }
+  void recieveItem(int item) { items.push_back(item); }
 
-  int throwItem(int item) {
-    int retVal = item / 3;
-    retVal = this->operation(item, item);
-    this->inspections++;
+  const int throwItem() {
+    int item = items.front();
+    items.pop_front();
+    int retVal = operation(item, item);
+    retVal /= 3;
+    inspections++;
     return retVal;
   }
 
-  int toMonkey(int item) {
-    auto test = this->test(item);
-    return test;
-  }
+  int toMonkey(int item) { return test(item); }
 
-  const std::vector<int> &getItems() const { return this->items; }
+  const std::deque<int> &getItems() const { return items; }
 
-  bool hasItems() const { return this->items.empty(); }
+  bool hasItems() const { return !items.empty(); }
 
-  void clearItems() { this->items.clear(); }
-
-  const int getInsp() const { return this->inspections; }
+  const int getInsp() const { return inspections; }
 
   void print() {
-    std::cout << "Name: " << this->name << std::endl;
-    for (auto each : this->getItems()) {
-      std::cout << " Item: " << each << std::endl;
-      ;
+    std::cout << "Name: " << name << std::endl;
+    std::cout << "Items: ";
+    for (auto each : getItems()) {
+      std::cout << each << ", ";
     }
+    std::cout << std::endl;
   }
 
-  bool operator<(Monkey &other) {
-    return this->inspections < other.inspections;
-  }
+  bool operator<(Monkey &other) { return inspections < other.inspections; }
+  bool operator>(Monkey &other) { return inspections > other.inspections; }
 };
 
 void part1(std::vector<Monkey> monkeyList);
@@ -110,7 +117,7 @@ void part2(std::vector<Monkey> monkeyList);
 
 void run(utils utils) {
   std::printf("DAY11\n");
-  auto file = utils.readFile("input_day11_examples");
+  auto file = utils.readFile("input_day11");
   std::vector<Monkey> monkeyList;
   for (auto i = 0; i < file.size(); i += 7) {
     std::vector<std::string> range;
@@ -123,27 +130,22 @@ void run(utils utils) {
 }
 
 void part1(std::vector<Monkey> monkeyList) {
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 20; i++) {
     std::cout << i << std::endl;
-    for (auto monkey : monkeyList) {
-      // monkey.print();
-      for (int item : monkey.getItems()) {
-        int nItem = monkey.throwItem(item);
-        int toMonk = monkey.toMonkey(nItem);
-        std::printf("original: %d, new: %d from: %d to: %d\n", item, nItem,
-                    monkey.getName(), toMonk);
+    for (auto i = 0; i < monkeyList.size(); i++) {
+      while (monkeyList[i].hasItems()) {
+        int nItem = monkeyList[i].throwItem();
+        int toMonk = monkeyList[i].toMonkey(nItem);
         monkeyList[toMonk].recieveItem(nItem);
       }
-      monkey.clearItems();
+    }
+    for (auto monkey : monkeyList) {
+      monkey.print();
     }
   }
 
-  for (auto monkey : monkeyList) {
-    monkey.print();
-  }
-
   std::sort(monkeyList.begin(), monkeyList.end(),
-            [](auto a, auto b) { return a < b; });
+            [](auto a, auto b) { return a > b; });
   std::printf("part1: %d\n", monkeyList[0].getInsp() * monkeyList[1].getInsp());
 }
 

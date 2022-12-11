@@ -9,7 +9,7 @@ void part2(std::vector<std::string> &file);
 
 void run(utils utils) {
   std::printf("DAY7\n");
-  auto file = utils.readFile("resources/input_day7_examples");
+  auto file = utils.readFile("input_day7_examples");
 
   part1(file);
 }

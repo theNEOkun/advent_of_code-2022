@@ -7,7 +7,7 @@ void part2(std::string arr);
 
 void run(utils utils) {
   std::printf("DAY6\n");
-  auto file = utils.readFile("resources/input_day6");
+  auto file = utils.readFile("input_day6");
   std::string str = file[0];
   part1(str);
   part2(str);

@@ -8,7 +8,7 @@ void part2(std::vector<std::string> &file);
 
 void day4::run(utils utils) {
   std::cout << "DAY4" << std::endl;
-  std::vector<std::string> file = utils.readFile("resources/input_day4");
+  std::vector<std::string> file = utils.readFile("input_day4");
 
   part1(file);
   part2(file);

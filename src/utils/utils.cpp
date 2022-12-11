@@ -21,7 +21,7 @@ std::vector<std::string> utils::splitString(std::string str, std::string delimit
  * @return std::vector<std::string> containing all lines of the file
  */
 std::vector<std::string> utils::readFile(const char* fileName) {
-  std::string file = this->baseDir + fileName;
+  std::string file = this->baseDir + "resources/" + fileName;
   std::ifstream myfile(file);
   std::vector<std::string> retvec;
 

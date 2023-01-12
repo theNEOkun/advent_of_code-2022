@@ -13,7 +13,8 @@ set(SOURCES main.cpp
   day9/day9.cpp
   day10/day10.cpp
   day11/day11.cpp
-  day12/day12.cpp)
+  day12/day12.cpp
+  day13/day13.cpp)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O -Wall -ggdb -lstdc++")
 project(cmake-project)

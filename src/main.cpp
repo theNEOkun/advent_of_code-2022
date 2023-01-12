@@ -30,8 +30,8 @@ auto main(int argc, char *argv[]) -> int
   // day9::run(utils); line();
   // day10::run(utils); line();
   // day11::run(utils); line();
-  day12::run(utils); line();
-  // day13::run(utils); line();
+  // day12::run(utils); line();
+  day13::run(utils); line();
 }
 
 void line() {

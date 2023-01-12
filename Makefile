@@ -6,3 +6,6 @@ setup:
 
 run:
 	@./bin/cmake-project
+
+clean:
+	rm ./bin/* -r

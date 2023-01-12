@@ -15,7 +15,7 @@ set(SOURCES main.cpp
   day11/day11.cpp
   day12/day12.cpp)
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O -Wall -lstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O -Wall -ggdb -lstdc++")
 project(cmake-project)
 
 add_library(utils STATIC ${PROJECT_SOURCE_DIR}/utils/utils.cpp)

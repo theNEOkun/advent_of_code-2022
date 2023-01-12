@@ -97,11 +97,12 @@ void run(utils utils) {
         end = Node(row, col, 'z');
       }
     }
-    if(!start.empty() && !end.empty()) {
+    if (!start.empty() && !end.empty()) {
       break;
     }
   }
   part1(file, start, end);
+  part2(file, start, end);
 }
 
 template <class T, class Container = std::vector<T>,
@@ -223,7 +224,6 @@ public:
     while (!frontier.empty()) {
       Node current = frontier.top();
       frontier.pop();
-      current.print();
 
       if (current == this->end) {
         return std::make_optional(current);
@@ -246,7 +246,6 @@ public:
           frontier.push(successor);
         }
       }
-      std::printf("Frontier size: %lu\n", frontier.size());
     }
     return {};
   }
@@ -255,8 +254,28 @@ public:
 void part1(std::vector<std::string> &file, Node start, Node end) {
   AStar astar(file, start, end);
   auto result = astar.astar();
-  std::printf("%d\n", result.value().getGScore());
+  std::printf("part 1: %d\n", result.value().getGScore());
 }
 
-void part2(std::vector<std::string> &file, Node start, Node end) {}
+void part2(std::vector<std::string> &file, Node start, Node end) {
+  std::vector<Node> nodevec;
+  for(int row = 0; row < file.size(); row++) {
+    for(int col = 0; col < file[row].size(); col++) {
+      if(file[row][col] == 'a') {
+        nodevec.push_back(Node(std::make_pair(row, col), 'a'));
+      }
+    }
+  }
+  std::vector<std::pair<int, Node>> resultvec;
+  for(auto startpos: nodevec) {
+    AStar astar(file, startpos, end);
+    auto result = astar.astar();
+    if(result.has_value())
+      resultvec.push_back(std::make_pair(result.value().getGScore(), startpos));
+  }
+
+  std::sort(resultvec.begin(), resultvec.end(), [](auto a, auto b) { return a.first < b.first; });
+
+  std::printf("part2: %d\n", resultvec[0].first);
+}
 } // namespace day12

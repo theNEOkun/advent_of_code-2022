@@ -25,8 +25,8 @@ void part1(std::vector<std::string> &file) {
   int counter = 0;
   counter += file.size() * 2;
   counter += file[0].size() * 2 - 4;
-  for (int treeRow = 1; treeRow < file.size() - 1; treeRow++) {
-    for (int treeCol = 1; treeCol < file[treeRow].size() - 1; treeCol++) {
+  for (auto treeRow = 1; treeRow < file.size() - 1; treeRow++) {
+    for (auto treeCol = 1; treeCol < file[treeRow].size() - 1; treeCol++) {
       int tree = file[treeRow][treeCol] - '0';
       bool leftBool = false;
       for (int i = 0; i < treeRow; i++) {

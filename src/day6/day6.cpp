@@ -15,7 +15,7 @@ void run(utils utils) {
 
 int getInfo(std::string arr, int length) {
   int counter = 0;
-  for (int i = 0; i < arr.length(); i++) {
+  for (size_t i = 0ul; i < arr.length(); i++) {
     counter++;
     std::set<char> temp;
     for(int n = 0; n < length; n++)
